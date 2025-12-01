@@ -1,0 +1,26 @@
+{
+  "name": "ascii-video-converter",
+  "version": "1.0.0",
+  "description": "A VK Mini App to convert videos to ASCII art",
+  "main": "script.js",
+  "scripts": {
+    "start": "serve",
+    "build": "mkdir -p dist && cp index.html style.css script.js dist/",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "author": "dayanegosha <https://vk.com/dayanegosha>",
+  "license": "MIT",
+  "dependencies": {
+    "@vkontakte/vk-bridge": "^2.12.1",
+    "gifshot": "^0.2.0",
+    "serve": "^14.2.0"
+  },
+  "devDependencies": {
+    "vite": "^7.1.6"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "iOS >= 12",
+    "Chrome >= 80"
+  ]
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ASCII Video Converter</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/@vkontakte/vk-bridge@2.12.1/dist/browser.js"></script>
+  <!-- Подключаем gifshot (оставляем для fallback, но не используем) -->
+  <script src="https://cdn.jsdelivr.net/npm/gifshot@0.2.0/build/gifshot.min.js"></script>
+  <style>
+    .container {
+      padding-bottom: 50px; /* Space for footer */
+    }
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: #a0a0a0;
+      padding: 10px;
+      z-index: 1000;
+    }
+    .footer a {
+      color: #2196F3;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      .footer {
+        font-size: 10px;
+        padding: 8px;
+        padding-bottom: calc(8px + env(safe-area-inset-bottom));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="header">
+      <h1>ASCII видео</h1>
+      <p>Видео в ASCII</p>
+    </div>
+
+    <!-- Шаг 1: Выбор размера -->
+    <div class="step" id="step-size">
+      <h2>Выбери размер</h2>
+      <div class="button-group">
+        <button class="btn" data-size="small">Маленький</button>
+        <button class="btn" data-size="medium">Средний</button>
+        <button class="btn" data-size="large">Большой</button>
+      </div>
+    </div>
+
+    <!-- Шаг 1.1: Выбор символов -->
+    <div class="step hidden" id="step-symbols">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <button class="btn" id="btn-back-symbols" style="padding:8px 16px; font-size:14px;">← Назад</button>
+        <h2 style="margin:0; text-align:center; flex:1;">Выбери символы</h2>
+        <div style="width:60px;"></div>
+      </div>
+      <div class="button-group">
+        <button class="btn" data-symbols="basic">Базовые ( .:+-*#% )</button>
+        <button class="btn" data-symbols="extended">Расширенные (все символы)</button>
+      </div>
+    </div>
+
+    <!-- Шаг 2: Выбор режима -->
+    <div class="step hidden" id="step-mode">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <button class="btn" id="btn-back-mode" style="padding:8px 16px; font-size:14px;">← Назад</button>
+        <h2 style="margin:0; text-align:center; flex:1;">Выбери режим</h2>
+        <div style="width:60px;"></div>
+      </div>
+      <div class="button-group">
+        <button class="btn" data-mode="colored">Цветной</button>
+        <button class="btn" data-mode="mono">Монохром</button>
+      </div>
+    </div>
+
+    <!-- Шаг 3: Загрузка видео -->
+    <div class="step hidden" id="step-upload">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <button class="btn" id="btn-back-upload" style="padding:8px 16px; font-size:14px;">← Назад</button>
+        <h2 style="margin:0; text-align:center; flex:1;">Загрузи видео (до 3 мин)</h2>
+        <div style="width:60px;"></div>
+      </div>
+      <div class="upload-area" id="drop-area">
+        <p>Перетащи сюда видео или кликни</p>
+        <input type="file" id="file-input" accept="video/*" hidden>
+      </div>
+    </div>
+
+    <!-- Шаг 4: Обработка (БОЛЬШОЙ круговой прогресс) -->
+    <div class="step hidden" id="step-processing">
+      <h2 style="text-align:center; margin-bottom:40px;">Обработка видео</h2>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:30px;">
+        <div style="position:relative; width:200px; height:200px;">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <circle
+              cx="100"
+              cy="100"
+              r="85"
+              stroke="#303030"
+              stroke-width="12"
+              fill="transparent"
+            ></circle>
+            <circle
+              id="progress-circle"
+              cx="100"
+              cy="100"
+              r="85"
+              stroke="#2196F3"
+              stroke-width="12"
+              fill="transparent"
+              style="stroke-dasharray: 534 534; stroke-dashoffset: 534; transition: stroke-dashoffset 0.3s ease;"
+            ></circle>
+          </svg>
+          <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center;">
+            <div id="progress-percent" style="font-size:36px; font-weight:800; color:#ffffff; line-height:1;">0%</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn" id="cancel-btn" style="margin-top:20px; background:#ff4444; color:white;">Отмена</button>
+    </div>
+
+    <!-- Шаг 5: Результат -->
+    <div class="step hidden" id="step-result">
+      <h2>Готово!</h2>
+      <div style="position:relative; width:100%; background:#000; border-radius:16px; overflow:hidden;">
+        <video id="result-video" playsinline webkit-playsinline style="width:100%; display:block;" loop></video>
+        <div class="video-controls" style="position:absolute; bottom:10px; left:10px; right:10px; display:flex; gap:10px; opacity:0; transition:opacity 0.3s;">
+          <button id="play-btn" class="control-btn" style="flex:1; padding:12px; border-radius:8px; background:#2196F3; color:white; border:none; font-weight:600;">Воспроизвести</button>
+        <button id="pause-btn" class="control-btn" style="flex:1; padding:12px; border-radius:8px; background:#505050; color:white; border:none; font-weight:600;">Пауза</button>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; justify-content:center;">
+      <button class="btn primary" id="download-btn" disabled>Скачать MP4</button>
+      <button class="btn" id="retry-btn" disabled>Попробовать ещё</button>
+    </div>
+  </div>
+</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

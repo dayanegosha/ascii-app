@@ -1,0 +1,258 @@
+/* 🌑 Dark Gray Theme with Bright Blue Accents — ASCII Video Converter */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background: #121212; /* Почти чёрный, но тёплый серый */
+  color: #e0e0e0;      /* Светло-серый текст */
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 500px;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 20px 0;
+}
+
+.header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #2196F3, #03A9F4); /* Ярко-синий градиент */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.5px;
+  text-shadow: 0 0 8px rgba(33, 150, 243, 0.3);
+}
+
+.header p {
+  color: #a0a0a0;
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+.step {
+  background: rgba(30, 30, 30, 0.8); /* Тёмно-серый фон шага */
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(60, 60, 60, 0.5); /* Тонкая серая обводка */
+  animation: fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #2196F3, #03A9F4, transparent); /* Ярко-синяя линия сверху */
+}
+
+.hidden {
+  display: none !important;
+}
+
+.button-group {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* 🌀 Обновлённый стиль кнопок с эффектом увеличения и неоновой подсветки */
+.btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 14px;
+  background: rgba(40, 40, 40, 0.7);
+  color: #e0e0e0;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 2px solid rgba(80, 80, 80, 0.5); /* Более заметная обводка */
+  position: relative;
+  overflow: hidden;
+  will-change: transform, box-shadow, background-color; /* Оптимизация анимации */
+}
+
+.btn:hover {
+  background: rgba(50, 50, 50, 0.95);
+  transform: scale(1.03);
+  border-color: #2196F3; /* Ярко-синяя обводка */
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(33, 150, 243, 0.4),
+              0 4px 16px rgba(33, 150, 243, 0.2);
+  text-shadow: 0 0 8px rgba(33, 150, 243, 0.3);
+}
+
+.btn:active {
+  transform: scale(0.98);
+  transition: transform 0.1s;
+}
+
+/* 🟦 Стиль главной кнопки (Скачать) */
+.btn.primary {
+  background: linear-gradient(90deg, #2196F3, #03A9F4); /* Ярко-синий градиент */
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(33, 150, 243, 0.4);
+  border: none;
+}
+
+.btn.primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(33, 150, 243, 0.7),
+              0 8px 24px rgba(33, 150, 243, 0.4);
+  background: linear-gradient(90deg, #29B6F6, #03A9F4);
+  text-shadow: 0 0 12px rgba(33, 150, 243, 0.5);
+}
+
+.upload-area {
+  border: 2px dashed #505050; /* Серая пунктирная рамка */
+  border-radius: 16px;
+  padding: 50px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(35, 35, 35, 0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-area::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, rgba(33, 150, 243, 0.1), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.upload-area:hover {
+  border-color: #2196F3; /* При наведении — ярко-синий! */
+  background: rgba(40, 40, 45, 0.8);
+}
+
+.upload-area:hover::before {
+  opacity: 1;
+}
+
+.upload-area p {
+  font-size: 16px;
+  color: #c0c0c0;
+}
+
+.upload-area strong {
+  color: #2196F3; /* Ярко-синий текст */
+  text-decoration: underline;
+}
+
+.progress {
+  margin-top: 30px;
+  height: 10px;
+  background: rgba(50, 50, 50, 0.6);
+  border-radius: 50px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #2196F3, #03A9F4); /* Ярко-синий прогресс */
+  box-shadow: 0 0 15px rgba(33, 150, 243, 0.7);
+  transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(90deg, rgba(3, 169, 244, 0), #03A9F4);
+  filter: blur(10px);
+}
+
+#progress-text {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #a0a0a0;
+  font-weight: 500;
+}
+
+#result-video {
+  width: 100%;
+  border-radius: 16px;
+  margin: 24px 0;
+  border: 1px solid rgba(60, 60, 60, 0.5);
+  background: #000;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Пульсирующий эффект для кнопки скачивания — теперь синий! */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
+  70% { box-shadow: 0 0 0 12px rgba(33, 150, 243, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+}
+
+.btn.primary {
+  animation: pulse 2s infinite;
+}
+
+/* Адаптивность */
+@media (max-width: 550px) {
+  .container {
+    padding: 0 16px;
+  }
+  .step {
+    padding: 24px 20px;
+  }
+  .header h1 {
+    font-size: 24px;
+  }
+  .btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+}
