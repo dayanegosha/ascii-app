@@ -1,5 +1,9 @@
 # ascii-app
 
+> **Project moved:** the browser converter and its Telegram edition now live
+> together in [ASCII Video Studio](https://github.com/dayanegosha/ascii-video-studio).
+> This repository is preserved as a read-only historical snapshot.
+
 A **VK Mini App** that converts a video into **ASCII-art video** entirely in the
 browser — no upload, no backend. Pick a few options, and every frame is redrawn
 as ASCII on a `<canvas>` and recorded back into a playable clip.
