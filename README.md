@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/project-card.svg" alt="ascii-app project card" width="100%" /></p>
+
 # ascii-app
 
 > **Project moved:** the browser converter and its Telegram edition now live
